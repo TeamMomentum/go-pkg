@@ -14,9 +14,9 @@ type Service struct {
 	*sheets.Service
 }
 
-// GetService is the wrapper function for sheets.NewService
+// NewService is the wrapper function for sheets.NewService
 // To use OAuth2 Client Authentication, give the client which was returned by oauth2 package.
-func GetService(ctx context.Context, client *http.Client) (*Service, error) {
+func NewService(ctx context.Context, client *http.Client) (*Service, error) {
 	var srv *sheets.Service
 	var err error
 
@@ -87,7 +87,7 @@ func (s Service) UpdateSheet(spreadsheetId string, sheetTitle string, src interf
 		return fmt.Errorf("dst is not a Slice of Struct")
 	}
 
-	headerVR, err := s.Get(spreadsheetId, sheetTitle + "!1:1")
+	headerVR, err := s.Get(spreadsheetId, sheetTitle+"!1:1")
 	if err != nil {
 		return fmt.Errorf("unable to retrieve header row from sheet: %w", err)
 	}
@@ -240,10 +240,10 @@ func (s Service) DeleteRows(spreadsheetId string, sheetTitle string, startIndex 
 			{
 				DeleteDimension: &sheets.DeleteDimensionRequest{
 					Range: &sheets.DimensionRange{
-						Dimension: "ROWS",
-						SheetId: sheetId,
+						Dimension:  "ROWS",
+						SheetId:    sheetId,
 						StartIndex: startIndex,
-						EndIndex: endIndex,
+						EndIndex:   endIndex,
 					},
 				},
 			},
