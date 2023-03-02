@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"sync"
@@ -26,19 +27,6 @@ type entry struct {
 	SpanID         string                            `json:"logging.googleapis.com/spanId,omitempty"`
 	Trace          string                            `json:"logging.googleapis.com/trace,omitempty"`
 	TraceSampled   bool                              `json:"logging.googleapis.com/trace_sampled,omitempty"`
-}
-
-func (e *entry) String() string {
-	if e.Severity == "" {
-		e.Severity = ltype.LogSeverity_INFO.String()
-	}
-
-	out, err := json.Marshal(e)
-	if err != nil {
-		log.Printf("json.Marshal: %v", err)
-	}
-
-	return string(out)
 }
 
 type Logger struct {
@@ -63,17 +51,17 @@ func (lg *Logger) printf(serverity, format string, v ...interface{}) {
 	lg.mu.Lock()
 	defer lg.mu.Unlock()
 
-	lg.logger.Println(lg.fmtEntry(serverity, fmt.Sprintf(format, v...)))
+	lg.logger.Println(lg.print(serverity, fmt.Sprintf(format, v...)))
 }
 
 func (lg *Logger) println(serverity string, v ...interface{}) {
 	lg.mu.Lock()
 	defer lg.mu.Unlock()
 
-	lg.logger.Println(lg.fmtEntry(serverity, fmt.Sprint(v...)))
+	lg.logger.Println(lg.print(serverity, fmt.Sprint(v...)))
 }
 
-func (lg *Logger) fmtEntry(serverity, msg string) *entry {
+func (lg *Logger) print(serverity, msg string) string {
 	l := make(map[string]string, len(lg.entry.Labels))
 	for k, v := range lg.entry.Labels {
 		f := lg.labelFuncs[k]
@@ -86,11 +74,25 @@ func (lg *Logger) fmtEntry(serverity, msg string) *entry {
 		l[k] = v
 	}
 
-	return &entry{
-		Message:  msg,
-		Labels:   l,
-		Severity: serverity,
+	e := &entry{
+		Severity:       serverity,
+		Message:        msg,
+		HTTPRequest:    lg.entry.HTTPRequest,
+		InsertID:       lg.entry.InsertID,
+		Labels:         l,
+		Operation:      lg.entry.Operation,
+		SourceLocation: lg.entry.SourceLocation,
+		SpanID:         lg.entry.SpanID,
+		Trace:          lg.entry.Trace,
+		TraceSampled:   lg.entry.TraceSampled,
 	}
+
+	out, err := json.Marshal(e)
+	if err != nil {
+		log.Printf("json.Marshal: %v", err)
+	}
+
+	return string(out)
 }
 
 func (lg *Logger) SetOutput(out io.Writer) {
@@ -122,10 +124,29 @@ func (lg *Logger) SetEntryHTTPRequest(r *http.Request) {
 		lg.entry.HTTPRequest = &ltype.HttpRequest{
 			RequestMethod: r.Method,
 			RequestUrl:    r.URL.String(),
-			Protocol:      r.Proto,
+			RequestSize:   r.ContentLength,
+			UserAgent:     r.UserAgent(),
 			RemoteIp:      r.RemoteAddr,
+			ServerIp:      hostIP(r.Host),
+			Referer:       r.Referer(),
+			Protocol:      r.Proto,
 		}
 	}
+}
+
+func hostIP(host string) string {
+	addrs, err := net.LookupIP(host)
+	if err != nil {
+		return ""
+	}
+
+	for _, addr := range addrs {
+		if !addr.IsLoopback() {
+			return addr.String()
+		}
+	}
+
+	return ""
 }
 
 func (lg *Logger) SetEntryInsertID(id string) {
