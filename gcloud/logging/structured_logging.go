@@ -34,7 +34,7 @@ type Logger struct {
 	entry  *entry
 
 	labelFuncs map[string]func(v string) string
-	mu         sync.Mutex
+	rwmu       sync.RWMutex
 }
 
 func New(out io.Writer, prefix string, flag int) *Logger {
@@ -48,20 +48,17 @@ func New(out io.Writer, prefix string, flag int) *Logger {
 }
 
 func (lg *Logger) printf(serverity, format string, v ...interface{}) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
-
-	lg.logger.Println(lg.print(serverity, fmt.Sprintf(format, v...)))
+	lg.logger.Println(lg.fmtString(serverity, fmt.Sprintf(format, v...)))
 }
 
 func (lg *Logger) println(serverity string, v ...interface{}) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
-
-	lg.logger.Println(lg.print(serverity, fmt.Sprint(v...)))
+	lg.logger.Println(lg.fmtString(serverity, fmt.Sprint(v...)))
 }
 
-func (lg *Logger) print(serverity, msg string) string {
+func (lg *Logger) fmtString(serverity, msg string) string {
+	lg.rwmu.RLock()
+	defer lg.rwmu.RUnlock()
+
 	l := make(map[string]string, len(lg.entry.Labels))
 	for k, v := range lg.entry.Labels {
 		f := lg.labelFuncs[k]
@@ -96,29 +93,20 @@ func (lg *Logger) print(serverity, msg string) string {
 }
 
 func (lg *Logger) SetOutput(out io.Writer) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
-
 	lg.logger.SetOutput(out)
 }
 
 func (lg *Logger) SetPrefix(prefix string) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
-
 	lg.logger.SetPrefix(prefix)
 }
 
 func (lg *Logger) SetFlags(flag int) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
-
 	lg.logger.SetFlags(flag)
 }
 
 func (lg *Logger) SetEntryHTTPRequest(r *http.Request) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	if r != nil {
 		lg.entry.HTTPRequest = &ltype.HttpRequest{
@@ -150,64 +138,64 @@ func hostIP(host string) string {
 }
 
 func (lg *Logger) SetEntryInsertID(id string) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.InsertID = id
 }
 
 func (lg *Logger) SetEntryLabel(k, v string) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.Labels[k] = v
 }
 
 func (lg *Logger) SetEntryLabels(l map[string]string) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.Labels = l
 }
 
 func (lg *Logger) SetEntryLabelFunc(k string, f func(v string) string) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.labelFuncs[k] = f
 }
 
 func (lg *Logger) SetEntryOperation(o *loggingpb.LogEntryOperation) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.Operation = o
 }
 
 func (lg *Logger) SetEntrySourceLocation(sl *loggingpb.LogEntrySourceLocation) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.SourceLocation = sl
 }
 
 func (lg *Logger) SetEntrySpanID(id string) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.SpanID = id
 }
 
 func (lg *Logger) SetEntryTrace(t string) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.Trace = t
 }
 
 func (lg *Logger) SetEntryTraceSampled(t bool) {
-	lg.mu.Lock()
-	defer lg.mu.Unlock()
+	lg.rwmu.Lock()
+	defer lg.rwmu.Unlock()
 
 	lg.entry.TraceSampled = t
 }
