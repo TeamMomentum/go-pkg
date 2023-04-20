@@ -1,4 +1,4 @@
-module github.com/TeamMomentum/go-pkg/gcloud/logging
+module github.com/TeamMomentum/go-pkg/logging
 
 go 1.20
 

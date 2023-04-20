@@ -14,7 +14,7 @@ import (
     "runtime"
     "time"
 
-    lg "github.com/TeamMomentum/go-pkg/gcloud/logging"
+    lg "github.com/TeamMomentum/go-pkg/logging"
 )
 
 func main() {
