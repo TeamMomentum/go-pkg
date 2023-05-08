@@ -52,7 +52,8 @@ func (lg *Logger) printf(serverity, format string, v ...interface{}) {
 }
 
 func (lg *Logger) println(serverity string, v ...interface{}) {
-	lg.logger.Println(lg.fmtString(serverity, fmt.Sprint(v...)))
+	s := fmt.Sprintln(v...)
+	lg.logger.Println(lg.fmtString(serverity, s[:len(s)-1]))
 }
 
 func (lg *Logger) fmtString(serverity, msg string) string {
