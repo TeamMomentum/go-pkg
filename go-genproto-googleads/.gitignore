@@ -19,3 +19,5 @@ vendor/
 
 build/
 googleapis/
+
+*.go-e
