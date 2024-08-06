@@ -1,4 +1,4 @@
-module github.com/dictav/go-genproto-googleads
+module github.com/TeamMomentum/go-pkg/go-genproto-googleads
 
 go 1.20
 
