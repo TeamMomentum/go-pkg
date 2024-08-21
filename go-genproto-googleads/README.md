@@ -32,3 +32,24 @@ Enjoy!
 
 
 [googleapis/googleapis]: https://github.com/googleapis/googleapis/
+
+## Apacheライセンスへの対応について
+
+各goファイルの先頭に以下のコメントを追加
+```　text
+// copy from https://github.com/dictav/go-genproto-googleads
+// and changed by TeamMomentum
+```
+
+大量のgoファイルが有るためshellscriptでコメントの追加処理を行う。
+処理コマンドは以下の通り
+``` bash
+Usage: ./addlicense.sh -i <license_file> -l <line_number> -d <directory>
+```
+``` bash
+ディレクトリ ./pb
+$ ./addLicense.sh -i add_license.txt -l 21 -d ./pb/v17
+
+ディレクトリ ./v17
+$ ./addLicense.sh -i add_license.txt -l 17 -d ./v17 
+```

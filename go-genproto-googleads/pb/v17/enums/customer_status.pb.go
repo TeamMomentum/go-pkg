@@ -18,6 +18,9 @@
 // 	protoc        v4.25.3
 // source: google/ads/googleads/v17/enums/customer_status.proto
 
+// copy from https://github.com/dictav/go-genproto-googleads
+// and changed by TeamMomentum
+
 package enums
 
 import (
