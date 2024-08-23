@@ -18,9 +18,6 @@
 // 	protoc        v4.25.3
 // source: google/ads/googleads/v17/services/keyword_plan_campaign_keyword_service.proto
 
-// copy from https://github.com/dictav/go-genproto-googleads
-// and changed by TeamMomentum
-
 package services
 
 import (

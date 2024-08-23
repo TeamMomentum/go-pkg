@@ -18,9 +18,6 @@
 // 	protoc        v4.25.3
 // source: google/ads/googleads/v17/services/customer_sk_ad_network_conversion_value_schema_service.proto
 
-// copy from https://github.com/dictav/go-genproto-googleads
-// and changed by TeamMomentum
-
 package services
 
 import (

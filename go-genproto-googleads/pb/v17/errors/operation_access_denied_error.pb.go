@@ -18,9 +18,6 @@
 // 	protoc        v4.25.3
 // source: google/ads/googleads/v17/errors/operation_access_denied_error.proto
 
-// copy from https://github.com/dictav/go-genproto-googleads
-// and changed by TeamMomentum
-
 package errors
 
 import (

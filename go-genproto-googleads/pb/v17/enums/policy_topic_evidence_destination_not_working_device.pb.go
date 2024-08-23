@@ -18,9 +18,6 @@
 // 	protoc        v4.25.3
 // source: google/ads/googleads/v17/enums/policy_topic_evidence_destination_not_working_device.proto
 
-// copy from https://github.com/dictav/go-genproto-googleads
-// and changed by TeamMomentum
-
 package enums
 
 import (

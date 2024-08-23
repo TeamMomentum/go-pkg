@@ -18,9 +18,6 @@
 // 	protoc        v4.25.3
 // source: google/ads/googleads/v17/enums/feed_origin.proto
 
-// copy from https://github.com/dictav/go-genproto-googleads
-// and changed by TeamMomentum
-
 package enums
 
 import (
