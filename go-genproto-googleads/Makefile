@@ -1,3 +1,6 @@
+# copy from https://github.com/dictav/go-genproto-googleads
+# and changed by TeamMomentum
+
 PKG := github.com/TeamMomentum/go-pkg/go-genproto-googleads
 GOOGLE_PROTO := google.golang.org/genproto/googleapis/ads/googleads
 
