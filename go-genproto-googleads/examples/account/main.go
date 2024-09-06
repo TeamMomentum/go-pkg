@@ -1,3 +1,6 @@
+// copy from https://github.com/dictav/go-genproto-googleads
+// and changed by TeamMomentum
+
 package main
 
 import (

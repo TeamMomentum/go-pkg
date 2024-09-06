@@ -12,12 +12,12 @@ This is Google Ads API Go Client. The sources is auto generated from the proto f
 ## Install
 
 ```sh
-$ go mod edit -require github.com/dictav/go-genproto-googleads@v0.20220116.1
+$ go mod edit -require github.com/TeamMomentum/go-pkg/go-genproto-googleads@v0.20220116.1
 ```
 
 ## How to generate
 
-I forked [googleapis/googleapis] and wrote patches for building Go Client of Google Ads API [here](https://github.com/dictav/googleapis).
+I forked [googleapis/googleapis] and wrote patches for building Go Client of Google Ads API [here](https://github.com/TeamMomentum/go-pkg/googleapis).
 
 ```sh
 $ make all
