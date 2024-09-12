@@ -3,7 +3,7 @@ module github.com/dictav/go-genproto-googleads/examples
 go 1.20
 
 require (
-	github.com/dictav/go-genproto-googleads v0.20231026.1
+	github.com/TeamMomentum/go-pkg/go-genproto-googleads v0.0.0-20240912025821-bcabf2f714e4
 	github.com/joeshaw/envdecode v0.0.0-20200121155833-099f1fc765bd
 	golang.org/x/oauth2 v0.13.0
 	google.golang.org/api v0.148.0
@@ -30,5 +30,5 @@ require (
 	google.golang.org/genproto v0.0.0-20231016165738-49dd2c1f3d0b // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231016165738-49dd2c1f3d0b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231016165738-49dd2c1f3d0b // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 )
