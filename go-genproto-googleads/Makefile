@@ -4,7 +4,7 @@
 PKG := github.com/TeamMomentum/go-pkg/go-genproto-googleads
 GOOGLE_PROTO := google.golang.org/genproto/googleapis/ads/googleads
 
-TARGETS := v18
+TARGETS := v19
 SRC := googleapis/bazel-bin/google/ads/googleads/$(VERSION)/gapi-ads-googleads-$(VERSION)-go.tar.gz
 
 all: $(TARGETS)
