@@ -20,7 +20,12 @@ $ go mod edit -require github.com/TeamMomentum/go-pkg/go-genproto-googleads@v0.2
 I forked [googleapis/googleapis] and wrote patches for building Go Client of Google Ads API [here](https://github.com/TeamMomentum/go-pkg/googleapis).
 
 ```sh
-$ make all
+$ docker build --platform linux/amd64 -t my-bazel .
+$ docker run --platform linux/amd64 -it --rm -v ~/dev/go-pkg/go-genproto-googleads:/workspace my-bazel /bin/bash
+```
+
+```
+# make all
 ```
 
 Enjoy!
