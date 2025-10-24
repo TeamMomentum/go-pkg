@@ -4,8 +4,9 @@
 PKG := github.com/TeamMomentum/go-pkg/go-genproto-googleads
 GOOGLE_PROTO := google.golang.org/genproto/googleapis/ads/googleads
 
-TARGETS := v19
-SRC := googleapis/bazel-bin/google/ads/googleads/$(VERSION)/gapi-ads-googleads-$(VERSION)-go.tar.gz
+TARGETS := v21
+BAZEL_BIN := $(shell cd googleapis; bazel info bazel-bin)
+SRC := $(BAZEL_BIN)/google/ads/googleads/$(VERSION)/gapi-ads-googleads-$(VERSION)-go.tar.gz
 
 all: $(TARGETS)
 
@@ -19,7 +20,8 @@ gen: build
 	cp -a build/$(GOOGLE_PROTO)/$(VERSION) pb/$(VERSION)
 
 build: $(SRC)
-	mkdir tmp
+	@echo "Using BAZEL_BIN=$(BAZEL_BIN)"
+	mkdir -p tmp
 	tar zxf $(SRC) -C tmp
 	grep -l -R '$(GOOGLE_PROTO)' tmp/ | \
 		xargs sed -i -e 's,$(GOOGLE_PROTO),$(PKG)/pb,'
