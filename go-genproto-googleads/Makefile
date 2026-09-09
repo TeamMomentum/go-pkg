@@ -32,7 +32,7 @@ build: $(SRC)
 $(SRC): googleapis
 	cd googleapis; git reset --hard
 	./googleads-go.patch.sh $(PKG) $(VERSION)
-	cd googleapis; bazel build --cxxopt=-std=c++14 --host_cxxopt=-std=c++14 //google/ads/googleads/$(VERSION):gapi-ads-googleads-$(VERSION)-go
+	cd googleapis; bazel build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17 //google/ads/googleads/$(VERSION):gapi-ads-googleads-$(VERSION)-go
 
 .PHONY: googleapis
 googleapis:
