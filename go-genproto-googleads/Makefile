@@ -34,8 +34,13 @@ $(SRC): googleapis
 	./googleads-go.patch.sh $(PKG) $(VERSION)
 	cd googleapis; bazel build --cxxopt=-std=c++14 --host_cxxopt=-std=c++14 //google/ads/googleads/$(VERSION):gapi-ads-googleads-$(VERSION)-go
 
+.PHONY: googleapis
 googleapis:
-	git clone --depth=1 https://github.com/googleapis/googleapis
+	if [ -d googleapis/.git ]; then \
+		cd googleapis && git fetch --depth=1 origin && git reset --hard origin/HEAD; \
+	else \
+		git clone --depth=1 https://github.com/googleapis/googleapis; \
+	fi
 
 clean:
 	-rm -rf tmp
