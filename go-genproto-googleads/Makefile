@@ -4,7 +4,7 @@
 PKG := github.com/TeamMomentum/go-pkg/go-genproto-googleads
 GOOGLE_PROTO := google.golang.org/genproto/googleapis/ads/googleads
 
-TARGETS := v22
+TARGETS := v25
 BAZEL_BIN := $(shell cd googleapis; bazel info bazel-bin)
 SRC := $(BAZEL_BIN)/google/ads/googleads/$(VERSION)/gapi-ads-googleads-$(VERSION)-go.tar.gz
 
@@ -32,10 +32,15 @@ build: $(SRC)
 $(SRC): googleapis
 	cd googleapis; git reset --hard
 	./googleads-go.patch.sh $(PKG) $(VERSION)
-	cd googleapis; bazel build --cxxopt=-std=c++14 --host_cxxopt=-std=c++14 //google/ads/googleads/$(VERSION):gapi-ads-googleads-$(VERSION)-go
+	cd googleapis; bazel build --cxxopt=-std=c++17 --host_cxxopt=-std=c++17 //google/ads/googleads/$(VERSION):gapi-ads-googleads-$(VERSION)-go
 
+.PHONY: googleapis
 googleapis:
-	git clone --depth=1 https://github.com/googleapis/googleapis
+	if [ -d googleapis/.git ]; then \
+		cd googleapis && git fetch --depth=1 origin && git reset --hard origin/HEAD; \
+	else \
+		git clone --depth=1 https://github.com/googleapis/googleapis; \
+	fi
 
 clean:
 	-rm -rf tmp
