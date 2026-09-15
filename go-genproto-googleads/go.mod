@@ -3,9 +3,10 @@ module github.com/TeamMomentum/go-pkg/go-genproto-googleads
 go 1.25.0
 
 require (
-	cloud.google.com/go/longrunning v0.6.0
+	cloud.google.com/go/longrunning v1.2.0
 	github.com/googleapis/gax-go/v2 v2.24.1
 	google.golang.org/api v0.288.0
+	google.golang.org/genproto v0.0.0-20260715232425-e75dac1f907d
 	google.golang.org/genproto/googleapis/api v0.0.0-20260715232425-e75dac1f907d
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260715232425-e75dac1f907d
 	google.golang.org/grpc v1.83.1
@@ -13,7 +14,7 @@ require (
 )
 
 require (
-	cloud.google.com/go v0.115.1 // indirect
+	cloud.google.com/go v0.123.0 // indirect
 	cloud.google.com/go/auth v0.20.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
