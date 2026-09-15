@@ -38,6 +38,7 @@ go_gapic_library(
     service_yaml = "googleads_$VERSION.yaml",
     importpath = "$IMPORT_PATH/$VERSION;googleads",
     deps = [
+        "//google/ads/googleads/$VERSION/actions:actions_go_proto",
         "//google/ads/googleads/$VERSION/common:common_go_proto",
         "//google/ads/googleads/$VERSION/enums:enums_go_proto",
         "//google/ads/googleads/$VERSION/resources:resources_go_proto",
@@ -57,12 +58,29 @@ go_gapic_assembly_pkg(
     name = "gapi-ads-googleads-$VERSION-go",
     deps = [
         ":googleads_go_gapic",
+        "//google/ads/googleads/$VERSION/actions:actions_go_proto",
         "//google/ads/googleads/$VERSION/common:common_go_proto",
         "//google/ads/googleads/$VERSION/enums:enums_go_proto",
         "//google/ads/googleads/$VERSION/errors:errors_go_proto",
         "//google/ads/googleads/$VERSION/resources:resources_go_proto",
         "//google/ads/googleads/$VERSION/services:services_go_proto",
     ],
+)
+EOF
+
+cat <<EOF >> googleapis/google/ads/googleads/$VERSION/actions/BUILD.bazel
+##############################################################################
+# Go
+##############################################################################
+load(
+    "@com_google_googleapis_imports//:imports.bzl",
+    "go_proto_library",
+)
+
+go_proto_library(
+    name = "actions_go_proto",
+    importpath = "google.golang.org/genproto/googleapis/ads/googleads/$VERSION/actions",
+    protos = [":actions_proto"],
 )
 EOF
 

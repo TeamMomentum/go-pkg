@@ -18,6 +18,22 @@ gen: build
 	-rm -rf $(VERSION) pb/$(VERSION)
 	cp -a build/$(PKG)/$(VERSION) $(VERSION)
 	cp -a build/$(GOOGLE_PROTO)/$(VERSION) pb/$(VERSION)
+	$(MAKE) verify VERSION=$(VERSION)
+
+# Fails the build if generated code imports a pb/$(VERSION) package that
+# doesn't actually exist (e.g. a new proto package added upstream that
+# googleads-go.patch.sh doesn't yet wire up a go_proto_library for).
+.PHONY: verify
+verify:
+	@echo "verifying pb/$(VERSION) against its own imports ..."
+	@status=0; \
+	for pkg in $$(grep -oh '$(PKG)/pb/$(VERSION)/[A-Za-z0-9_]*' -r $(VERSION) pb/$(VERSION) | sed -E 's#.*/pb/$(VERSION)/##' | sort -u); do \
+		if [ ! -d "pb/$(VERSION)/$$pkg" ]; then \
+			echo "ERROR: pb/$(VERSION)/$$pkg is imported but was not generated (update googleads-go.patch.sh)"; \
+			status=1; \
+		fi; \
+	done; \
+	exit $$status
 
 build: $(SRC)
 	@echo "Using BAZEL_BIN=$(BAZEL_BIN)"
